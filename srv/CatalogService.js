@@ -1,7 +1,6 @@
 const cds = require("@sap/cds");
 const MongoCLient = require("mongodb").MongoClient;
 const uri = process.env.DATABASE_URL;
-   // "mongodb://ercoleTraining:1mCYNEsW91ud8CzV@ac-vjo9hxr-shard-00-00.frwpxmh.mongodb.net:27017,ac-vjo9hxr-shard-00-01.frwpxmh.mongodb.net:27017,ac-vjo9hxr-shard-00-02.frwpxmh.mongodb.net:27017/?ssl=true&replicaSet=atlas-2th2tu-shard-0&authSource=admin&retryWrites=true&w=majority";
 const db_name = "capmongo";
 const client = new MongoCLient(uri);
 const ObjectId = require("mongodb").ObjectId;
