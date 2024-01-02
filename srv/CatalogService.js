@@ -1,7 +1,7 @@
 const cds = require("@sap/cds");
 const MongoCLient = require("mongodb").MongoClient;
-const uri =
-    "mongodb://ercoleTraining:1mCYNEsW91ud8CzV@ac-vjo9hxr-shard-00-00.frwpxmh.mongodb.net:27017,ac-vjo9hxr-shard-00-01.frwpxmh.mongodb.net:27017,ac-vjo9hxr-shard-00-02.frwpxmh.mongodb.net:27017/?ssl=true&replicaSet=atlas-2th2tu-shard-0&authSource=admin&retryWrites=true&w=majority";
+const uri = process.env.DATABASE_URL;
+   // "mongodb://ercoleTraining:1mCYNEsW91ud8CzV@ac-vjo9hxr-shard-00-00.frwpxmh.mongodb.net:27017,ac-vjo9hxr-shard-00-01.frwpxmh.mongodb.net:27017,ac-vjo9hxr-shard-00-02.frwpxmh.mongodb.net:27017/?ssl=true&replicaSet=atlas-2th2tu-shard-0&authSource=admin&retryWrites=true&w=majority";
 const db_name = "capmongo";
 const client = new MongoCLient(uri);
 const ObjectId = require("mongodb").ObjectId;
@@ -26,6 +26,12 @@ async function _getAllCustomers(req) {
 
     // setup $Top en $ SKIP
     var filter, results, limit, offset;
+
+    if (req.query.SELECT.one) {
+        var sId = req.query.SELECT.from.ref[0].where[2].val;
+        filter = { _id: ObjectId(sId) };
+    }
+
     if (req.query.SELECT.limit) {
         limit = req.query.SELECT.limit.rows.val;
         if (req.query.SELECT.limit.offset) {
@@ -45,6 +51,10 @@ async function _getAllCustomers(req) {
         .toArray();
 
     results = results.slice(offset);
+
+    for (var i = 0; i < results.length; i++) {
+        results[i].id = results[i]._id.toString();
+    }
 
     return results;
 }

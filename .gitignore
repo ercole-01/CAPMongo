@@ -1,3 +1,6 @@
+# EDB database connection 
+ .env
+
 # CAP CAPMongo
 _out
 *.db

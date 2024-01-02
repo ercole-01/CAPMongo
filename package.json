@@ -12,7 +12,8 @@
     "mongodb": "^6.3.0"
   },
   "devDependencies": {
-    "@cap-js/sqlite": "^1"
+    "@cap-js/sqlite": "^1",
+    "dotenv": "^16.3.1"
   },
   "scripts": {
     "start": "cds-serve"
