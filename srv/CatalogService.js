@@ -5,6 +5,8 @@ const db_name = "capmongo";
 const client = new MongoCLient(uri);
 const ObjectId = require("mongodb").ObjectId;
 
+
+//Video 3
 async function _createCustomer(req) {
     await client.connect();
     var db = await client.db(db_name);
@@ -17,6 +19,19 @@ async function _createCustomer(req) {
     return req.data;
 }
 
+//video 6: Aggregate Data and Analytics
+async function _getCustomerByCountry(req) {
+    await client.connect();
+    var db = await client.db(db_name);
+    var customer = await db.collection("customer");
+    const results = await customer.aggregate([
+        { $match: { type: "C" } },
+        { $group: { _id: "$country" , count: { $sum: 1 } } },
+        { $sort: { count: -1 } }
+    ])
+    return results.toArray();
+}
+
 async function _getAllCustomers(req) {
     // Connect the client to the server
     await client.connect();
@@ -26,9 +41,10 @@ async function _getAllCustomers(req) {
     // setup $Top en $ SKIP
     var filter, results, limit, offset;
 
+    //video 5
     if (req.query.SELECT.one) {
         var sId = req.query.SELECT.from.ref[0].where[2].val;
-        filter = { _id: ObjectId(sId) };
+        filter = { _id: new ObjectId(sId) };
     }
 
     if (req.query.SELECT.limit) {
@@ -62,4 +78,5 @@ module.exports = cds.service.impl(function () {
     const { customer } = this.entities;
     this.on("INSERT", customer, _createCustomer);
     this.on("READ", customer, _getAllCustomers);
+    this.on("getCustomerByCountry", _getCustomerByCountry);
 });
